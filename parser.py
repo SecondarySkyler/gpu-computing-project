@@ -38,7 +38,7 @@ def read_mtx_file(file_path):
 def write_coo_to_csv(matrix, filename):
     filepath = folder + 'coo/' + filename + '.csv'
     file = open(filepath, 'x')
-    file.write(f'{matrix.get_shape()[0]}, {matrix.get_shape()[1]}, {matrix.getnnz()}\n')
+    file.write(f'{matrix.get_shape()[0]},{matrix.get_shape()[1]},{matrix.getnnz()}\n')
     rows = ''
     cols = ''
     data = ''
@@ -55,7 +55,7 @@ def write_coo_to_csv(matrix, filename):
 def write_csr_to_csv(matrix, filename):
     filepath = folder + 'csr/' + filename + '.csv'
     file = open(filepath, 'x')
-    file.write(f'{matrix.get_shape()[0]}, {matrix.get_shape()[1]}, {matrix.getnnz()}\n')
+    file.write(f'{matrix.get_shape()[0]},{matrix.get_shape()[1]},{matrix.getnnz()}\n')
     rows = ''
     cols = ''
     data = ''
