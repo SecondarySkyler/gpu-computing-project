@@ -1,105 +1,159 @@
 #include "../include/utilities.hpp"
 #include "../include/matio.h"
 
-COO readMatrixCOO(std::string filename) {
-    COO result;
 
-    std::string filePath = "./test_matrices/" + filename + ".mtx";
+void parseCsvToCoo(int &m, int &n, int &nnz, int *&rows, int *&cols, float *&values, char* filename) {
+    std::string filePath = "./test_matrices/coo/" + std::string(filename) + ".csv";
     std::ifstream file(filePath);
+
     if (!file.is_open()) {
         std::cerr << "Error opening file" << std::endl;
     }
 
-    // ignore comments
-    while (file.peek() == '%')
-        file.ignore(2048, '\n');
-
     // read the matrix size and number of non-zero elements
-    int numRows, numCols, numNnz;
-    file >> numRows >> numCols >> numNnz;
-    result.totalRows = numRows;
-    result.totalCols = numCols;
-    result.totalNnz = numNnz;
+    std::string matrixInfo;
+    std::getline(file, matrixInfo);
+    std::stringstream ss(matrixInfo);
 
-    // initialize the matrix
-    result.rows = new int[numNnz];
-    result.cols = new int[numNnz];
-    result.values = new float[numNnz];
+    std::vector<std::string> tokens;
+    std::string token;
 
-    // read the matrix elements
-    for (int line = 0; line < numNnz; line++) {
-        float value;
-        int currentRow, currentCol;
-        file >> currentRow >> currentCol >> value;
-        result.rows[line] = currentRow;
-        result.cols[line] = currentCol;
-        result.values[line] = value;
+    while (std::getline(ss, token, ',')) {
+        tokens.push_back(token);
+    }
+
+    m = std::stoi(tokens[0]);
+    n = std::stoi(tokens[1]);
+    nnz = std::stoi(tokens[2]);
+
+    // parse the row indices
+    rows = new int[nnz];
+    std::string rowIndices;
+    std::getline(file, rowIndices);
+    std::stringstream ssRowIndices(rowIndices);
+
+    std::vector<std::string> rowTokens;
+    std::string rowToken;
+
+    while (std::getline(ssRowIndices, rowToken, ',')) {
+        rowTokens.push_back(rowToken);
+    }
+
+    for (int i = 0; i < nnz; i++) {
+        rows[i] = std::stoi(rowTokens[i]);
+    }
+
+    // parse the column indices
+    cols = new int[nnz];
+    std::string colIndices;
+    std::getline(file, colIndices);
+    std::stringstream ssColIndices(colIndices);
+
+    std::vector<std::string> colTokens;
+    std::string colToken;
+
+    while (std::getline(ssColIndices, colToken, ',')) {
+        colTokens.push_back(colToken);
+    }
+
+    for (int i = 0; i < nnz; i++) {
+        cols[i] = std::stoi(colTokens[i]);
+    }
+
+    // parse the values
+    values = new float[nnz];
+    std::string valIndices;
+    std::getline(file, valIndices);
+    std::stringstream ssValIndices(valIndices);
+
+    std::vector<std::string> valTokens;
+    std::string valToken;
+
+    while (std::getline(ssValIndices, valToken, ',')) {
+        valTokens.push_back(valToken);
+    }
+
+    for (int i = 0; i < nnz; i++) {
+        values[i] = std::stof(valTokens[i]);
     }
 
     file.close();
-    return result;
 }
 
-int findIndex(float* array, int size, int value) {
-    for (int i = 0; i < size; i++) {
-        if (array[i] == value) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-void mtxToCsr(std::string filename, int &m, int &n, int &nnz,
-    int *&csrRowPtr, int *&csrColIdx, float* &csrVal) {
-    
-    std::string filePath = "./test_matrices/" + filename + ".mtx";
+void parseCsvToCsr(int &m, int &n, int &nnz, int *&rows, int *&cols, float *&values, char* filename) {
+    std::string filePath = "./test_matrices/csr/" + std::string(filename) + ".csv";
     std::ifstream file(filePath);
+
     if (!file.is_open()) {
         std::cerr << "Error opening file" << std::endl;
     }
 
-    // ignore comments
-    while (file.peek() == '%')
-        file.ignore(2048, '\n');
-
     // read the matrix size and number of non-zero elements
-    file >> m >> n >> nnz;
+    std::string matrixInfo;
+    std::getline(file, matrixInfo);
+    std::stringstream ss(matrixInfo);
 
-    // initialize row ptrs, column indices and values
-    csrRowPtr = new int[m + 1];
-    csrColIdx = new int[nnz];
-    csrVal = new float[nnz];
-    int* auxRowIdx = new int[nnz];
+    std::vector<std::string> tokens;
+    std::string token;
 
-
-    // read the matrix elements, for the moment we ignore the row pointers
-    for (int line = 0; line < nnz; line++) {
-        float value;
-        int currentRow, currentCol;
-        file >> currentRow >> currentCol >> value;
-        auxRowIdx[line] = currentRow;
-        csrColIdx[line] = currentCol;
-        csrVal[line] = value;
+    while (std::getline(ss, token, ',')) {
+        tokens.push_back(token);
     }
 
-    // create dense matrix
-    float* denseMatrix = (float*) calloc(m * n, sizeof(float));
+    m = std::stoi(tokens[0]);
+    n = std::stoi(tokens[1]);
+    nnz = std::stoi(tokens[2]);
 
-    // fill dense matrix
+    // parse the row indices
+    rows = new int[m + 1];
+    std::string rowIndices;
+    std::getline(file, rowIndices);
+    std::stringstream ssRowIndices(rowIndices);
+
+    std::vector<std::string> rowTokens;
+    std::string rowToken;
+
+    while (std::getline(ssRowIndices, rowToken, ',')) {
+        rowTokens.push_back(rowToken);
+    }
+
+    for (int i = 0; i < m + 1; i++) {
+        rows[i] = std::stoi(rowTokens[i]);
+    }
+
+    // parse the column indices
+    cols = new int[nnz];
+    std::string colIndices;
+    std::getline(file, colIndices);
+    std::stringstream ssColIndices(colIndices);
+
+    std::vector<std::string> colTokens;
+    std::string colToken;
+
+    while (std::getline(ssColIndices, colToken, ',')) {
+        colTokens.push_back(colToken);
+    }
+
     for (int i = 0; i < nnz; i++) {
-        denseMatrix[auxRowIdx[i] * n + csrColIdx[i]] = csrVal[i];
+        cols[i] = std::stoi(colTokens[i]);
     }
 
-    // scan dense matrix to fill csrRowPtr
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++) {
-            if (denseMatrix[i * n + j] != 0) {
-                csrRowPtr[i] = findIndex(csrVal, nnz, denseMatrix[i * n + j]);
-                break;
-            }
-        }
+    // parse the values
+    values = new float[nnz];
+    std::string valIndices;
+    std::getline(file, valIndices);
+    std::stringstream ssValIndices(valIndices);
+
+    std::vector<std::string> valTokens;
+    std::string valToken;
+
+    while (std::getline(ssValIndices, valToken, ',')) {
+        valTokens.push_back(valToken);
     }
-    csrRowPtr[m] = nnz;
+
+    for (int i = 0; i < nnz; i++) {
+        values[i] = std::stof(valTokens[i]);
+    }
 
     file.close();
 }
