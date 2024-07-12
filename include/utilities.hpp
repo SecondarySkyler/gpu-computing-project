@@ -44,3 +44,5 @@ float* generateCOOGroundTruth(int m, int n, int nnz, int *rows, int *cols, float
 
 
 bool checkResult(float* groundTruth, int* transposedRow, int* transposedCol, float* vals, int nnz, int sideLength);
+
+void cscToCoo(int m, int n, int nnz, int *rows, int *cols, float *values, int *&cooRows, int *&cooCols, float *&cooVals);
