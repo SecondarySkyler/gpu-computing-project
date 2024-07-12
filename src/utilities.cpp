@@ -163,7 +163,8 @@ float* generateCOOGroundTruth(int m, int n, int nnz, int *rows, int *cols, float
     }
 
     for (int i = 0; i < nnz; i++) {
-        groundTruth[cols[i] * n + rows[i]] = values[i];
+        // printf();
+        groundTruth[cols[i] * m + rows[i]] = values[i];
     }
 
     return groundTruth;
@@ -172,9 +173,29 @@ float* generateCOOGroundTruth(int m, int n, int nnz, int *rows, int *cols, float
 bool checkResult(float* groundTruth, int* transposedRow, int* transposedCol, float* vals, int nnz, int sideLength) {
     for (int i = 0; i < nnz; i++) {
         if (groundTruth[transposedRow[i] * sideLength + transposedCol[i]] != vals[i]) {
+            printf("Mismatch at %d, %d\n", transposedRow[i], transposedCol[i]);
+            printf("Expected: %f, Got: %f\n", groundTruth[transposedRow[i] * sideLength + transposedCol[i]], vals[i]);
             return false;
         }
     }
 
     return true;
+}
+
+void cscToCoo(int m, int n, int nnz, int *rows, int *cols, float *values, int *&cooRows, int *&cooCols, float *&cooVals) {
+    cooRows = new int[nnz];
+    cooCols = new int[nnz];
+    cooVals = new float[nnz];
+
+    int k = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = cols[i]; j < cols[i + 1]; j++) {
+            cooRows[k] = rows[j];
+            cooCols[k] = i;
+            cooVals[k] = values[j];
+            k++;
+        }
+    }
+
+    
 }
