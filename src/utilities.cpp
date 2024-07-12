@@ -1,8 +1,6 @@
 #include "../include/utilities.hpp"
-#include "../include/matio.h"
 
-
-void parseCsvToCoo(int &m, int &n, int &nnz, int *&rows, int *&cols, float *&values, char* filename) {
+void parseCsvToCoo(int &m, int &n, int &nnz, int *&rows, int *&cols, float *&values, std::string filename) {
     std::string filePath = "./test_matrices/coo/" + std::string(filename) + ".csv";
     std::ifstream file(filePath);
 
@@ -80,7 +78,7 @@ void parseCsvToCoo(int &m, int &n, int &nnz, int *&rows, int *&cols, float *&val
     file.close();
 }
 
-void parseCsvToCsr(int &m, int &n, int &nnz, int *&rows, int *&cols, float *&values, char* filename) {
+void parseCsvToCsr(int &m, int &n, int &nnz, int *&rows, int *&cols, float *&values, std::string filename) {
     std::string filePath = "./test_matrices/csr/" + std::string(filename) + ".csv";
     std::ifstream file(filePath);
 
@@ -156,4 +154,27 @@ void parseCsvToCsr(int &m, int &n, int &nnz, int *&rows, int *&cols, float *&val
     }
 
     file.close();
+}
+
+float* generateCOOGroundTruth(int m, int n, int nnz, int *rows, int *cols, float *values) {
+    float *groundTruth = new float[m * n];
+    for (int i = 0; i < m * n; i++) {
+        groundTruth[i] = 0.0;
+    }
+
+    for (int i = 0; i < nnz; i++) {
+        groundTruth[cols[i] * n + rows[i]] = values[i];
+    }
+
+    return groundTruth;
+}
+
+bool checkResult(float* groundTruth, int* transposedRow, int* transposedCol, float* vals, int nnz, int sideLength) {
+    for (int i = 0; i < nnz; i++) {
+        if (groundTruth[transposedRow[i] * sideLength + transposedCol[i]] != vals[i]) {
+            return false;
+        }
+    }
+
+    return true;
 }
