@@ -31,18 +31,18 @@ At this point you are ready to run the project.
 ## Matrices used for testing
 The matrices used for benchmarking the project has been collected from the [SuiteSparse Matrix Collection](https://sparse.tamu.edu/).
 In particular, this is a comprehensive table:
-|                               **Source**                               | **Formal Name** | **Dimensions** | **NNZ**    | **Sparsity** |
-|:----------------------------------------------------------------------:|-----------------|----------------|------------|--------------|
-| [HB/arc130](https://sparse.tamu.edu/HB/arc130)                         |      arc130     |    130 x 130   |    1,282   |      92%     |
-| [Hohn/fd15](https://sparse.tamu.edu/Hohn/fd15)                         |       fd15      |  11532 x 11532 |   44,206   |      99%     |
-| [Rommes/bips07_1998](https://sparse.tamu.edu/Rommes/bips07_1998)       |   bips07_1998   |  15066 x 15066 |   62,198   |      99%     |
-| [Grund/bayer10](https://sparse.tamu.edu/Grund/bayer10)                 |     bayer10     |  13436 x 13436 |   71,594   |      99%     |
-| [Oberwolfach/piston](https://sparse.tamu.edu/Oberwolfach/piston)       |      piston     |   2025 x 2025  |   100,015  |      97%     |
-| [vanHeukelum/cage10](https://sparse.tamu.edu/vanHeukelum/cage10)       |      cage10     |  11397 x 11397 |   150,645  |      99%     |
-| [Szczerba/Ill_Stokes](https://sparse.tamu.edu/Szczerba/Ill_Stokes)     |    Ill_Stokes   |  20896 x 20896 |   191,368  |      99%     |
-| [Boeing/msc10848](https://sparse.tamu.edu/Boeing/msc10848)             |     msc10848    |  10848 x 10848 |  1,229,776 |      98%     |
-| [Simon/appu](https://sparse.tamu.edu/Simon/appu)                       |       appu      |  14000 x 14000 |  1,853,104 |      99%     |
-| [Belcastro/human_gene2](https://sparse.tamu.edu/Belcastro/human_gene2) |   human_gene2   |  14340 x 14340 | 18,068,388 |      91%     |
+|                                **Source**                                | **Formal Name**  | **Dimensions** | **NNZ**   | **Sparsity** |
+|:------------------------------------------------------------------------:|------------------|----------------|-----------|--------------|
+| [HB/arc130](https://sparse.tamu.edu/HB/arc130)                           |      arc130      |    130 x 130   |   1,282   |      92%     |
+| [Hohn/fd15](https://sparse.tamu.edu/Hohn/fd15)                           |       fd15       |  11532 x 11532 |   44,206  |      99%     |
+| [Rommes/bips07_1998](https://sparse.tamu.edu/Rommes/bips07_1998)         |    bips07_1998   |  15066 x 15066 |   62,198  |      99%     |
+| [Grund/bayer10](https://sparse.tamu.edu/Grund/bayer10)                   |      bayer10     |  13436 x 13436 |   71,594  |      99%     |
+| [Oberwolfach/piston](https://sparse.tamu.edu/Oberwolfach/piston)         |      piston      |   2025 x 2025  |  100,015  |      97%     |
+| [vanHeukelum/cage10](https://sparse.tamu.edu/vanHeukelum/cage10)         |      cage10      |  11397 x 11397 |  150,645  |      99%     |
+| [Szczerba/Ill_Stokes](https://sparse.tamu.edu/Szczerba/Ill_Stokes)       |    Ill_Stokes    |  20896 x 20896 |  191,368  |      99%     |
+| [Boeing/msc10848](https://sparse.tamu.edu/Boeing/msc10848)               |     msc10848     |  10848 x 10848 | 1,229,776 |      98%     |
+| [Simon/appu](https://sparse.tamu.edu/Simon/appu)                         |       appu       |  14000 x 14000 | 1,853,104 |      99%     |
+| [TSOPF/TSOPF_RS_b300_c2](https://sparse.tamu.edu/TSOPF/TSOPF_RS_b300_c2) | TSOPF_RS_b300_c2 |  28338 x 28338 | 2,943,887 |      99%     |
 ### How to use a different matrix
 If you would like to test the project with different matrices, be sure to use the *MatrixMarket* format.
 From the SuiteSparse website you can download the chosen matrix using *wget* (I don't know why but clicking on the download button won't start the download). <br />
