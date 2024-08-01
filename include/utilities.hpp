@@ -4,6 +4,8 @@
 #include <vector>
 #include <sstream>
 
+#define dtype double
+
 /**
  * @brief Parse a CSV file to COO format
  * @param m number of rows
@@ -14,7 +16,7 @@
  * @param values values
  * @param filename name of the CSV file
  */
-void parseCsvToCoo(int &m, int &n, int &nnz, int *&rows, int *&cols, float *&values, std::string filename);
+void parseCsvToCoo(int &m, int &n, int &nnz, int *&rows, int *&cols, dtype *&values, std::string filename);
 
 /**
  * @brief Parse a CSV file to CSR format
@@ -40,9 +42,12 @@ void parseCsvToCsr(int &m, int &n, int &nnz, int *&rows, int *&cols, float *&val
  * 
  * @note The generated ground truth is already transposed to ease comparison with the output of the algorithm
  */
-float* generateCOOGroundTruth(int m, int n, int nnz, int *rows, int *cols, float *values);
+dtype* generateCOOGroundTruth(int m, int n, int nnz, int *rows, int *cols, dtype *values);
+
+float* generateGroundTruthFromMTX(std::string filename);
 
 
-bool checkResult(float* groundTruth, int* transposedRow, int* transposedCol, float* vals, int nnz, int sideLength);
+bool checkResult(dtype* groundTruth, int* transposedRow, int* transposedCol, dtype* vals, int nnz, int sideLength);
+bool checkResultCSR(float* groundTruth, int* transposedRow, int* transposedCol, float* vals, int rows, int cols);
 
 void cscToCoo(int m, int n, int nnz, int *rows, int *cols, float *values, int *&cooRows, int *&cooCols, float *&cooVals);

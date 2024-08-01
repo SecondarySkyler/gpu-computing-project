@@ -1,6 +1,6 @@
 #include "../include/utilities.hpp"
 
-void parseCsvToCoo(int &m, int &n, int &nnz, int *&rows, int *&cols, float *&values, std::string filename) {
+void parseCsvToCoo(int &m, int &n, int &nnz, int *&rows, int *&cols, dtype *&values, std::string filename) {
     std::string filePath = "./test_matrices/coo/" + std::string(filename) + ".csv";
     std::ifstream file(filePath);
 
@@ -59,7 +59,7 @@ void parseCsvToCoo(int &m, int &n, int &nnz, int *&rows, int *&cols, float *&val
     }
 
     // parse the values
-    values = new float[nnz];
+    values = new dtype[nnz];
     std::string valIndices;
     std::getline(file, valIndices);
     std::stringstream ssValIndices(valIndices);
@@ -72,7 +72,7 @@ void parseCsvToCoo(int &m, int &n, int &nnz, int *&rows, int *&cols, float *&val
     }
 
     for (int i = 0; i < nnz; i++) {
-        values[i] = std::stof(valTokens[i]);
+        values[i] = std::stod(valTokens[i]);
     }
 
     file.close();
@@ -156,8 +156,8 @@ void parseCsvToCsr(int &m, int &n, int &nnz, int *&rows, int *&cols, float *&val
     file.close();
 }
 
-float* generateCOOGroundTruth(int m, int n, int nnz, int *rows, int *cols, float *values) {
-    float *groundTruth = new float[m * n];
+dtype* generateCOOGroundTruth(int m, int n, int nnz, int *rows, int *cols, dtype *values) {
+    dtype *groundTruth = new dtype[m * n];
     for (int i = 0; i < m * n; i++) {
         groundTruth[i] = 0.0;
     }
@@ -170,7 +170,7 @@ float* generateCOOGroundTruth(int m, int n, int nnz, int *rows, int *cols, float
     return groundTruth;
 }
 
-bool checkResult(float* groundTruth, int* transposedRow, int* transposedCol, float* vals, int nnz, int sideLength) {
+bool checkResult(dtype* groundTruth, int* transposedRow, int* transposedCol, dtype* vals, int nnz, int sideLength) {
     for (int i = 0; i < nnz; i++) {
         if (groundTruth[transposedRow[i] * sideLength + transposedCol[i]] != vals[i]) {
             printf("Mismatch at %d, %d\n", transposedRow[i], transposedCol[i]);
@@ -178,6 +178,56 @@ bool checkResult(float* groundTruth, int* transposedRow, int* transposedCol, flo
             return false;
         }
     }
+
+    return true;
+}
+
+bool checkResultCSR(float* groundTruth, int* transposedRow, int* transposedCol, float* vals, int rows, int cols) {
+    printf("rows: %d, cols: %d\n", rows, cols);
+    // first we need to create the dense matrix from the csc format
+    std::vector<float> cscToDense(rows * cols, 0.0);
+    for (int i = 0; i < cols; ++i) {
+        // printf("Processing column %d\n", i);
+        int start = transposedCol[i];
+        // printf("Start: %d\n", start);
+        int end = transposedCol[i + 1];
+        // printf("End: %d\n", end);
+
+        for (int j = start; j < end; ++j) {
+            int row = transposedRow[j];
+            cscToDense[i * rows + row] = vals[j];
+        }
+    }
+    // printf("Dense matrix created\n");
+    // for (float val : cscToDense) {
+    //     printf("%.f ", val);
+    // }
+    // printf("\n");
+
+    // DEBUG
+    int totalElements = rows * cols;
+
+    // for (int i = 0; i < totalElements; ++i) {
+    //     printf("%.f ", groundTruth[i]);
+    // }
+    // printf("\n");
+
+    // for (int i = 0; i < totalElements; ++i) {
+    //     printf("%.f ", cscToDense[i]);
+    // }
+    // printf("\n");
+    
+
+
+
+    // now we compare the dense matrix with the ground truth
+    // for (int i = 0; i < totalElements; ++i) {
+    //     if (groundTruth[i] != cscToDense[i]) {
+    //         printf("Mismatch at %d, %d\n", i % rows, i / rows);
+    //         printf("Expected: %f, Got: %f\n", groundTruth[i], cscToDense[i]);
+    //         return false;
+    //     }
+    // }
 
     return true;
 }
@@ -198,4 +248,34 @@ void cscToCoo(int m, int n, int nnz, int *rows, int *cols, float *values, int *&
     }
 
     
+}
+
+float* generateGroundTruthFromMTX(std::string filename) {
+    std::string filePath = "./test_matrices/" + filename + ".mtx";
+    std::ifstream file(filePath);
+
+    if (!file.is_open()) {
+        std::cerr << "Error opening file" << std::endl;
+    }
+
+    // skip the comments
+    while (file.peek() == '%') {
+        file.ignore(2048, '\n');
+    }
+
+    int rows, cols, nnz;
+    file >> rows >> cols >> nnz;
+
+    float *groundTruth = new float[rows * cols];
+    std::fill(groundTruth, groundTruth + rows * cols, 0.0);
+
+    for (int i = 0; i < nnz; i++) {
+        int row, col;
+        float val;
+        file >> row >> col >> val;
+        groundTruth[(col - 1) * rows + (row - 1)] = val;
+    }
+
+    file.close();
+    return groundTruth;
 }
