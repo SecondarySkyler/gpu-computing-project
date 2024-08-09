@@ -24,9 +24,13 @@ cd gpu-computing-project/
 ```
 Compile the executable
 ```
-make all
+make
 ```
-At this point you are ready to run the project.
+At this point you are ready to run the project using:
+```
+./transpose <0 - 9 | all>
+```
+Where you can use a number between 0 and 9 to perform the transposition on a specific matrix, or by using *all* to transpose all the matrices listed below
 
 ## Matrices used for testing
 The matrices used for benchmarking the project has been collected from the [SuiteSparse Matrix Collection](https://sparse.tamu.edu/).
