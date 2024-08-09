@@ -76,7 +76,7 @@ INC_DIR = include
 ## Make variables ##
 
 # Target executable name:
-EXE = run_test
+EXE = transpose
 
 # Object files:
 OBJS = $(OBJ_DIR)/main.o $(OBJ_DIR)/transpose_coo.o $(OBJ_DIR)/transpose_csr.o $(OBJ_DIR)/utilities.o
