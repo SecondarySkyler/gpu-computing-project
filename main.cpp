@@ -1,5 +1,6 @@
 #include "include/transpose_coo.cuh"
 #include "include/transpose_csr.cuh"
+#include "include/transpose_csr_v2.cuh"
 #include <array>
 
 std::array<std::string, 10> matrixNames = {
@@ -52,7 +53,7 @@ int main(int argc, char const *argv[]) {
             } else {
                 std::string matrixName = matrixNames[matrixNumber];
                 // transpose_COO(matrixName);
-                transpose_CSR(matrixName);
+                transpose_CSR_v2(matrixName);
             }
         }
     }
