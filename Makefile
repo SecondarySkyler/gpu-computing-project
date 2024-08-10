@@ -1,31 +1,3 @@
-# CC = g++
-# NVCC = nvcc
-# NVCC_FLAGS = --gpu-architecture=sm_80 -m64
-# SRC := src
-# INC := include
-
-# all: main.o utilities.o main 
-
-# main.o: $(SRC)/main.cu
-# 	$(NVCC) $(NVCC_FLAGS) -c $(SRC)/main.cu -o main.o
-
-# utilities.o: $(SRC)/utilities.cpp $(INC)/utilities.hpp
-# 	$(CC) $(INC) -c $(SRC)/utilities.cpp -o utilities.o
-
-# main: main.o
-# 	$(NVCC) $(NVCC_FLAGS) main.o utilities.o -o main -lcudart -lcusparse
-
-# all: transpose.o utilities.o transpose 
-
-# transpose.o: $(SRC)/transpose.cu
-# 	$(NVCC) $(NVCC_FLAGS) -c $(SRC)/transpose.cu -o transpose.o
-
-# utilities.o: $(SRC)/utilities.cpp $(INC)/utilities.hpp
-# 	$(CC) $(INC) -c $(SRC)/utilities.cpp -o utilities.o
-
-# transpose: transpose.o
-# 	$(NVCC) $(NVCC_FLAGS) transpose.o utilities.o -o transpose -lcudart -lcusparse
-
 ###########################################################
 
 ## USER SPECIFIC DIRECTORIES ##
@@ -79,7 +51,7 @@ INC_DIR = include
 EXE = transpose
 
 # Object files:
-OBJS = $(OBJ_DIR)/main.o $(OBJ_DIR)/transpose_coo.o $(OBJ_DIR)/transpose_csr.o $(OBJ_DIR)/utilities.o
+OBJS = $(OBJ_DIR)/main.o $(OBJ_DIR)/transpose_coo.o $(OBJ_DIR)/transpose_csr.o $(OBJ_DIR)/transpose_csr_v2.o $(OBJ_DIR)/utilities.o
 
 ##########################################################
 
