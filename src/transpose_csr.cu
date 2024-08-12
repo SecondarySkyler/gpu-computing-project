@@ -111,7 +111,6 @@ void transpose_CSR(std::string fileName) {
     CHECK(cudaEventRecord(stop, 0);) 
     CHECK(cudaEventSynchronize(stop));
     CHECK(cudaEventElapsedTime(&step1_ms, start, stop));
-    printf("Measured the time: %f\n", step1_ms);
 
     CHECK(cudaDeviceSynchronize());
 
@@ -132,7 +131,6 @@ void transpose_CSR(std::string fileName) {
     CHECK(cudaEventRecord(stop, 0));
     CHECK(cudaEventSynchronize(stop));
     CHECK(cudaEventElapsedTime(&step2_ms, start, stop));
-    printf("Measured the time: %f\n", step2_ms);
 
     CHECK(cudaDeviceSynchronize());
 
@@ -157,20 +155,27 @@ void transpose_CSR(std::string fileName) {
     CHECK(cudaEventRecord(stop, 0));
     CHECK(cudaEventSynchronize(stop));
     CHECK(cudaEventElapsedTime(&step3_ms, start, stop));
-    printf("Measured the time: %f\n", step3_ms);
 
     CHECK(cudaDeviceSynchronize());
 
     // Check if the result is correct
     dtype* groundTruth = generateGroundTruthFromMTX(fileName);
 
+    printf("Performed CSR transposition on matrix %s\n", fileName.c_str());
     if (checkResultCSR(groundTruth, cscColPtrCollector, cscRowIdx, cscVal, rows, cols)) {
-        printf("Performed CSR transposition on matrix %s\n", fileName.c_str());
         // printf("Bandwidth: %f GB/s\n", 4 * nnz * sizeof(int) * 1e-6 * NUM_REPS / milliseconds);
-        printf("Status: Correct\n");
+        printf("Status: ");
+        // green color
+        printf("\033[1;32m");
+        printf("Correct\n");
+        printf("\033[0m");
         printf("--------------------------------\n");
     } else {
-        printf("The result is incorrect\n");
+        printf("Status: ");
+        // red color
+        printf("\033[1;31m");
+        printf("Incorrect\n");
+        printf("\033[0m");
         printf("--------------------------------\n");
     }
 

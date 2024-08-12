@@ -84,13 +84,21 @@ void transpose_COO(std::string fileName) {
 
 
   // check if the result is correct
+  printf("Performed COO transposition on matrix %s\n", fileName.c_str());
   if (checkResult(groundTruth, row, col, val, nnz, cols)){
-    printf("Performed COO transposition on matrix %s\n", fileName.c_str());
     printf("Bandwidth: %f GB/s\n", 4 * nnz * sizeof(int) * 1e-6 * NUM_REPS / milliseconds);
-    printf("Status: Correct\n");
+    printf("Status: ");
+    // green color
+    printf("\033[1;32m");
+    printf("Correct\n");
+    printf("\033[0m");
     printf("--------------------------------\n");
   } else {
-    printf("The result is incorrect\n");
+    printf("Status: ");
+    // red color
+    printf("\033[1;31m");
+    printf("Incorrect\n");
+    printf("\033[0m");
     printf("--------------------------------\n");
   }
 

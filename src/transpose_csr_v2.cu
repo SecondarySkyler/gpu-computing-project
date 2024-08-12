@@ -150,7 +150,6 @@ void transpose_CSR_v2(std::string fileName) {
     CHECK(cudaEventSynchronize(stop));
     CHECK(cudaEventElapsedTime(&step1_ms, start, stop));
     CHECK(cudaDeviceSynchronize());
-    printf("Step 1: %f ms\n", step1_ms);
     
     /**
      * Step 2: Perform exclusive scan
@@ -179,7 +178,6 @@ void transpose_CSR_v2(std::string fileName) {
     CHECK(cudaEventSynchronize(stop));
     CHECK(cudaEventElapsedTime(&step2_ms, start, stop));
     CHECK(cudaDeviceSynchronize());
-    printf("Step 2: %f ms\n", step2_ms);
 
     // Compute the scan of the aux array and copy it to the device
     for (int i = 1; i < gridSize; i++) {
@@ -204,7 +202,6 @@ void transpose_CSR_v2(std::string fileName) {
     CHECK(cudaEventSynchronize(stop));
     CHECK(cudaEventElapsedTime(&step3_ms, start, stop));
     CHECK(cudaDeviceSynchronize());
-    printf("Step 3: %f ms\n", step3_ms);
 
     /**
      * Step 3: Compute the cscRowIdx and cscVal
@@ -230,19 +227,26 @@ void transpose_CSR_v2(std::string fileName) {
     CHECK(cudaEventSynchronize(stop));
     CHECK(cudaEventElapsedTime(&step4_ms, start, stop));
     CHECK(cudaDeviceSynchronize());
-    printf("Step 4: %f ms\n", step4_ms);
 
 
     // Check if the result is correct
     dtype* groundTruth = generateGroundTruthFromMTX(fileName);
 
+    printf("Performed CSR transposition on matrix %s\n", fileName.c_str());
     if (checkResultCSR(groundTruth, cscColPtrCollector, cscRowIdx, cscVal, rows, cols)) {
-        printf("Performed CSR transposition on matrix %s\n", fileName.c_str());
         // printf("Bandwidth: %f GB/s\n", 4 * nnz * sizeof(int) * 1e-6 * NUM_REPS / milliseconds);
-        printf("Status: Correct\n");
+        printf("Status: ");
+        // green color
+        printf("\033[1;32m");
+        printf("Correct\n");
+        printf("\033[0m");
         printf("--------------------------------\n");
     } else {
-        printf("The result is incorrect\n");
+        printf("Status: ");
+        // red color
+        printf("\033[1;31m");
+        printf("Incorrect\n");
+        printf("\033[0m");
         printf("--------------------------------\n");
     }
 
