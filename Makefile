@@ -51,7 +51,7 @@ INC_DIR = include
 EXE = transpose
 
 # Object files:
-OBJS = $(OBJ_DIR)/main.o $(OBJ_DIR)/transpose_coo.o $(OBJ_DIR)/transpose_csr.o $(OBJ_DIR)/transpose_csr_v2.o $(OBJ_DIR)/cusparse_coo.o $(OBJ_DIR)/utilities.o
+OBJS = $(OBJ_DIR)/main.o $(OBJ_DIR)/transpose_coo.o $(OBJ_DIR)/transpose_csr.o $(OBJ_DIR)/transpose_csr_v2.o $(OBJ_DIR)/cusparse_coo.o $(OBJ_DIR)/cusparse_csr.o $(OBJ_DIR)/utilities.o
 
 ##########################################################
 
