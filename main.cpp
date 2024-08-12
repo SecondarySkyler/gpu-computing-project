@@ -1,6 +1,7 @@
 #include "include/transpose_coo.cuh"
 #include "include/transpose_csr.cuh"
 #include "include/transpose_csr_v2.cuh"
+#include "include/cusparse_coo.cuh"
 #include <array>
 
 std::array<std::string, 10> matrixNames = {
@@ -42,8 +43,10 @@ int main(int argc, char const *argv[]) {
         std::string arg = argv[1];
         if (arg == "all") {
             for (std::string matrixName : matrixNames) {
-                // transpose_COO(matrixName);
-                transpose_CSR(matrixName);
+                // transpose_COO(matrixName); // works
+                // transpose_CSR(matrixName); // works
+                // transpose_CSR_v2(matrixName); // works
+                // cusparse_COO(matrixName); // works almost with all matrices except bayer10, piston and TSOPF_RS_b300_c2
             }
         } else {
             int matrixNumber = std::stoi(arg);
@@ -53,7 +56,9 @@ int main(int argc, char const *argv[]) {
             } else {
                 std::string matrixName = matrixNames[matrixNumber];
                 // transpose_COO(matrixName);
-                transpose_CSR_v2(matrixName);
+                // transpose_CSR(matrixName);
+                // transpose_CSR_v2(matrixName);
+                cusparse_COO(matrixName);
             }
         }
     }
