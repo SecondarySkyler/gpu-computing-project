@@ -28,7 +28,7 @@ CUDA_LIB_DIR= -L$(CUDA_ROOT_DIR)/lib64
 # CUDA include directory:
 CUDA_INC_DIR= -I$(CUDA_ROOT_DIR)/include
 # CUDA linking libraries:
-CUDA_LINK_LIBS= -lcudart
+CUDA_LINK_LIBS= -lcudart -lcusparse
 
 ##########################################################
 
@@ -51,7 +51,7 @@ INC_DIR = include
 EXE = transpose
 
 # Object files:
-OBJS = $(OBJ_DIR)/main.o $(OBJ_DIR)/transpose_coo.o $(OBJ_DIR)/transpose_csr.o $(OBJ_DIR)/transpose_csr_v2.o $(OBJ_DIR)/utilities.o
+OBJS = $(OBJ_DIR)/main.o $(OBJ_DIR)/transpose_coo.o $(OBJ_DIR)/transpose_csr.o $(OBJ_DIR)/transpose_csr_v2.o $(OBJ_DIR)/cusparse_coo.o $(OBJ_DIR)/utilities.o
 
 ##########################################################
 
