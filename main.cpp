@@ -46,7 +46,7 @@ int main(int argc, char const *argv[]) {
                 // transpose_COO(matrixName); // works
                 // transpose_CSR(matrixName); // works
                 // transpose_CSR_v2(matrixName); // works
-                // cusparse_COO(matrixName); // works almost with all matrices except bayer10, piston and TSOPF_RS_b300_c2
+                // cusparse_COO(matrixName); // works almost with all matrices except bayer10, appu and TSOPF_RS_b300_c2
             }
         } else {
             int matrixNumber = std::stoi(arg);
