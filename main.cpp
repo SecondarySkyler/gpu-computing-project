@@ -2,6 +2,7 @@
 #include "include/transpose_csr.cuh"
 #include "include/transpose_csr_v2.cuh"
 #include "include/cusparse_coo.cuh"
+#include "include/cusparse_csr.cuh"
 #include <array>
 
 std::array<std::string, 10> matrixNames = {
@@ -47,6 +48,13 @@ int main(int argc, char const *argv[]) {
                 // transpose_CSR(matrixName); // works
                 // transpose_CSR_v2(matrixName); // works
                 // cusparse_COO(matrixName); // works almost with all matrices except bayer10, appu and TSOPF_RS_b300_c2
+
+                /**
+                 * does not work with arc130 and bips07_1998 using CUDA_R_32F data type
+                 * the process gets killed on TSOFP_RS_b300_c2 using CUDA_R_64F data type
+                 *    - if the program is executed with ./transpose 9 it works 
+                 */
+                cusparse_CSR(matrixName);
             }
         } else {
             int matrixNumber = std::stoi(arg);
@@ -58,7 +66,8 @@ int main(int argc, char const *argv[]) {
                 // transpose_COO(matrixName);
                 // transpose_CSR(matrixName);
                 // transpose_CSR_v2(matrixName);
-                cusparse_COO(matrixName);
+                // cusparse_COO(matrixName);
+                cusparse_CSR(matrixName);
             }
         }
     }
