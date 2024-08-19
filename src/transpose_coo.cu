@@ -86,6 +86,7 @@ void transpose_COO(std::string fileName) {
   // check if the result is correct
   printf("Performed COO transposition on matrix %s\n", fileName.c_str());
   if (checkResult(groundTruth, row, col, val, nnz, cols)){
+    // the 4 factor is due to the fact that we are reading and writing from two arrays
     printf("Bandwidth: %f GB/s\n", 4 * nnz * sizeof(int) * 1e-6 * NUM_REPS / milliseconds);
     printf("Status: ");
     // green color
