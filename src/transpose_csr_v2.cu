@@ -9,7 +9,6 @@ __global__ void count_nnz(int nnz, int* csrColumnIndices, int* cscColPtr) {
 
     __syncthreads();
     if (tid < nnz) {
-        // int col = csrColumnIndices[tid];
         int col = shared[threadIdx.x];
         atomicAdd(&cscColPtr[col + 1], 1);
     }
@@ -230,11 +229,32 @@ void transpose_CSR_v2(std::string fileName) {
 
 
     // Check if the result is correct
+    float milliseconds = step1_ms + step2_ms + step3_ms + step4_ms;
     dtype* groundTruth = generateGroundTruthFromMTX(fileName);
+
+    // Calculate the total data accessed
+    // Step 1: Count
+    int copy_step_1 = 2 * nnz * sizeof(int); // R/W csrColumnIndices in shared memory
+    int count_step_1 = 3 * nnz * sizeof(int); // R nnz elements from shared memory, atomicAdd performs R/W on cscColPtr nnz times
+
+    // Step 2: Scan
+    int scan_step_2 = 2 * (cols + 1) * sizeof(int); // R/W cscColPtr
+    int write_step_2 = gridSize * sizeof(int); // W gridSize times on auxBlockSums (every last threadof each block writes to it)
+
+    // Step 3: Uniform update
+    int read_aux_step_3 = gridSize * sizeof(int); // R auxBlockSums
+    int uniform_update_step_3 = 2 * (cols + 1) * sizeof(int); // R/W cscColPtr
+
+    // Step 4: Fill CSC
+    int index_step_4 = 2 * nnz * sizeof(int); // R/W cscColPtr
+    int fill_step_4 = 2 * nnz * sizeof(int) + 2 * nnz * sizeof(dtype); // R/W row_offsets + R/W values
+
+    double total_data = copy_step_1 + count_step_1 + scan_step_2 + write_step_2 + read_aux_step_3 + uniform_update_step_3 + index_step_4 + fill_step_4;
+
 
     printf("Performed CSR transposition on matrix %s\n", fileName.c_str());
     if (checkResultCSR(groundTruth, cscColPtrCollector, cscRowIdx, cscVal, rows, cols)) {
-        // printf("Bandwidth: %f GB/s\n", 4 * nnz * sizeof(int) * 1e-6 * NUM_REPS / milliseconds);
+        printf("Bandwidth: %f GB/s\n", total_data * 1e-6 * NUM_REPS / milliseconds);
         printf("Status: ");
         // green color
         printf("\033[1;32m");
