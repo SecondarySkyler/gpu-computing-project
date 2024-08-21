@@ -67,25 +67,27 @@ void cusparse_CSR(std::string fileName) {
 
     // Convert CSR to CSC
     CHECK(cudaEventRecord(start));
-    CHECK_CUSPARSE(
-        cusparseCsr2cscEx2(
-            handle,
-            rows,
-            cols,
-            nnz,
-            d_csrValues,
-            d_csrRowPointers,
-            d_csrColumnIndices,
-            d_cscValues,
-            d_cscColumnPointers,
-            d_cscRowIndices,
-            CUDA_R_64F, // maybe change to CUDA_R_64F
-            CUSPARSE_ACTION_NUMERIC,
-            CUSPARSE_INDEX_BASE_ZERO,
-            CUSPARSE_CSR2CSC_ALG1,
-            dBuffer
-        )
-    );
+    for (int i = 0; i < NUM_REPS; i++) {
+        CHECK_CUSPARSE(
+            cusparseCsr2cscEx2(
+                handle,
+                rows,
+                cols,
+                nnz,
+                d_csrValues,
+                d_csrRowPointers,
+                d_csrColumnIndices,
+                d_cscValues,
+                d_cscColumnPointers,
+                d_cscRowIndices,
+                CUDA_R_64F, // maybe change to CUDA_R_64F
+                CUSPARSE_ACTION_NUMERIC,
+                CUSPARSE_INDEX_BASE_ZERO,
+                CUSPARSE_CSR2CSC_ALG1,
+                dBuffer
+            )
+        );
+    }
     CHECK(cudaEventRecord(stop));
     CHECK(cudaEventSynchronize(stop));
     CHECK(cudaEventElapsedTime(&milliseconds, start, stop));
@@ -116,8 +118,17 @@ void cusparse_CSR(std::string fileName) {
 
     dtype* groundTruth = generateGroundTruthFromMTX(fileName);
 
+    int copy_step_1 = 2 * nnz * sizeof(int); 
+    int count_step_1 = 3 * nnz * sizeof(int);
+    int scan_step_2 = 2 * (cols + 1) * sizeof(int);
+    int index_step_3 = 2 * nnz * sizeof(int);
+    int fill_step_3 = 2 * nnz * sizeof(int) + 2 * nnz * sizeof(dtype);
+
+    double total_data = copy_step_1 + count_step_1 + scan_step_2 + index_step_3 + fill_step_3;
+
     printf("Performed CSR to CSC conversion on matrix %s\n", fileName.c_str());
     if (checkResultCSR(groundTruth, cscColumnPointers, cscRowIndices, cscValues, rows, cols)) {
+        printf("Bandwidth: %f GB/s\n", total_data * 1e-6 * NUM_REPS / milliseconds);
         printf("Status: ");
         // green color
         printf("\033[1;32m");
