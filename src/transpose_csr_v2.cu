@@ -252,7 +252,7 @@ void transpose_CSR_v2(std::string fileName) {
     double total_data = copy_step_1 + count_step_1 + scan_step_2 + write_step_2 + read_aux_step_3 + uniform_update_step_3 + index_step_4 + fill_step_4;
 
 
-    printf("Performed CSR transposition on matrix %s\n", fileName.c_str());
+    printf("Performed CSR (v2) transposition on matrix %s\n", fileName.c_str());
     if (checkResultCSR(groundTruth, cscColPtrCollector, cscRowIdx, cscVal, rows, cols)) {
         printf("Bandwidth: %f GB/s\n", total_data * 1e-6 * NUM_REPS / milliseconds);
         printf("Status: ");
