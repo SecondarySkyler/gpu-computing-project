@@ -24,7 +24,6 @@ int main(int argc, char const *argv[]) {
     /*
     -------- DEVICE PROPERTIES --------
     */
-    // TODO: think about moving this to a separate function
     cudaDeviceProp prop;
     cudaGetDeviceProperties(&prop, 0);
     printf("\n");
@@ -35,40 +34,33 @@ int main(int argc, char const *argv[]) {
     printf("Shared memory per block (Kbytes) %.1f\n",(float)(prop.sharedMemPerBlock)/1024.0);  
     printf("--------------------------------\n");
 
-    if (argc != 2) {
-        printf("Usage: ./main <number | all>\n");
+    if (argc != 3) {
+        printf("Usage: ./main <algorithm> <number>\n");
+        printf("algorithm: coo | csr\n");
         printf("number: 0 - 9, to execute the transposition of a specific matrix\n");
-        printf("all: to execute the transposition of all matrices\n");
         exit(1);
     } else {
-        std::string arg = argv[1];
-        if (arg == "all") {
-            for (std::string matrixName : matrixNames) {
-                // transpose_COO(matrixName); // works
-                // transpose_CSR(matrixName); // works
-                // transpose_CSR_v2(matrixName); // works
-                // cusparse_COO(matrixName); // works almost with all matrices except bayer10, appu and TSOPF_RS_b300_c2
+        std::string algorithm = argv[1];
+        int index = std::stoi(argv[2]);
 
-                /**
-                 * does not work with arc130 and bips07_1998 using CUDA_R_32F data type
-                 * the process gets killed on TSOFP_RS_b300_c2 using CUDA_R_64F data type
-                 *    - if the program is executed with ./transpose 9 it works 
-                 */
-                cusparse_CSR(matrixName);
-            }
-        } else {
-            int matrixNumber = std::stoi(arg);
-            if (matrixNumber < 0 || matrixNumber > 10) {
-                printf("Invalid matrix number\n");
-                exit(1);
+        if (algorithm != "coo" && algorithm != "csr") {
+            printf("Invalid algorithm, the algorithm should be either coo or csr\n");
+            exit(1);
+        }
+
+        if (index >= 0 && index <= matrixNames.size() - 1) {
+            if (algorithm == "coo") {
+                transpose_COO(matrixNames[index]);
+                cusparse_COO(matrixNames[index]);
             } else {
-                std::string matrixName = matrixNames[matrixNumber];
-                // transpose_COO(matrixName);
-                // transpose_CSR(matrixName);
-                // transpose_CSR_v2(matrixName);
-                // cusparse_COO(matrixName);
-                cusparse_CSR(matrixName);
+                transpose_CSR(matrixNames[index]);
+                transpose_CSR_v2(matrixNames[index]);
+                cusparse_CSR(matrixNames[index]);
             }
+
+        } else {
+            printf("Invalid matrix number, the number should be in range [0,%ld]\n", matrixNames.size() - 1);
+            exit(1);
         }
     }
 
