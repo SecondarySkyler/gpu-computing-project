@@ -87,13 +87,17 @@ void cusparse_COO(std::string fileName) {
     );
 
     // Allocate buffer
+    /**
+     * This is only needed when the CUSPARSE_ALG requires additional memory
+     * Indeed, only the CUSPARSE_SPMM_COO_ALG2 requires additional memory
+     */
     CHECK_CUSPARSE(
         cusparseSpMM_bufferSize(
             handle, 
             CUSPARSE_OPERATION_NON_TRANSPOSE, 
             CUSPARSE_OPERATION_NON_TRANSPOSE,
             &alpha, sparseMatrix, identityMatrix, &beta, resultMatrix,
-            CUDA_R_32F, CUSPARSE_SPMM_ALG_DEFAULT, &bufferSize
+            CUDA_R_32F, CUSPARSE_SPMM_COO_ALG1, &bufferSize
         )
     );
 
@@ -110,14 +114,13 @@ void cusparse_COO(std::string fileName) {
                 CUSPARSE_OPERATION_TRANSPOSE,
                 CUSPARSE_OPERATION_NON_TRANSPOSE,
                 &alpha, sparseMatrix, identityMatrix, &beta, resultMatrix,
-                CUDA_R_32F, CUSPARSE_SPMM_ALG_DEFAULT, dBuffer
+                CUDA_R_32F, CUSPARSE_SPMM_COO_ALG1, dBuffer
             )
         );
     }
     CHECK(cudaEventRecord(stop));
     CHECK(cudaEventSynchronize(stop));
     CHECK(cudaEventElapsedTime(&milliseconds, start, stop));
-    printf("cuSparse COO Timing: %f ms\n", milliseconds);
 
     CHECK_CUSPARSE(cusparseDestroySpMat(sparseMatrix));
     CHECK_CUSPARSE(cusparseDestroyDnMat(identityMatrix));
@@ -154,10 +157,12 @@ void cusparse_COO(std::string fileName) {
     //     }
     //     printf("\n");
     // }
-
+    dtype totalData = (rows * cols) * sizeof(dtype);
+    totalData *= 3;
 
     printf("Performed cuSparse transposition on matrix %s\n", fileName.c_str());
     if (isCorrect) {
+        printf("Bandwidth: %f GB/s\n", totalData * 1e-6 * NUM_REPS / milliseconds);
         printf("Status: ");
         // green color
         printf("\033[1;32m");
