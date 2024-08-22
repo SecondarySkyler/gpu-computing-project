@@ -89,6 +89,84 @@ void parseCsvToCoo(int &m, int &n, int &nnz, int *&rows, int *&cols, dtype *&val
     file.close();
 }
 
+void parseCsvToCoo(int &m, int &n, int &nnz, int *&rows, int *&cols, cutype *&values, std::string filename) {
+    std::string filePath = "./test_matrices/coo/" + std::string(filename) + ".csv";
+    std::ifstream file(filePath);
+
+    if (!file.is_open()) {
+        std::cerr << "Error opening file" << std::endl;
+    }
+
+    // read the matrix size and number of non-zero elements
+    std::string matrixInfo;
+    std::getline(file, matrixInfo);
+    std::stringstream ss(matrixInfo);
+
+    std::vector<std::string> tokens;
+    std::string token;
+
+    while (std::getline(ss, token, ',')) {
+        tokens.push_back(token);
+    }
+
+    m = std::stoi(tokens[0]);
+    n = std::stoi(tokens[1]);
+    nnz = std::stoi(tokens[2]);
+
+    // parse the row indices
+    rows = new int[nnz];
+    std::string rowIndices;
+    std::getline(file, rowIndices);
+    std::stringstream ssRowIndices(rowIndices);
+
+    std::vector<std::string> rowTokens;
+    std::string rowToken;
+
+    while (std::getline(ssRowIndices, rowToken, ',')) {
+        rowTokens.push_back(rowToken);
+    }
+
+    for (int i = 0; i < nnz; i++) {
+        rows[i] = std::stoi(rowTokens[i]);
+    }
+
+    // parse the column indices
+    cols = new int[nnz];
+    std::string colIndices;
+    std::getline(file, colIndices);
+    std::stringstream ssColIndices(colIndices);
+
+    std::vector<std::string> colTokens;
+    std::string colToken;
+
+    while (std::getline(ssColIndices, colToken, ',')) {
+        colTokens.push_back(colToken);
+    }
+
+    for (int i = 0; i < nnz; i++) {
+        cols[i] = std::stoi(colTokens[i]);
+    }
+
+    // parse the values
+    values = new cutype[nnz];
+    std::string valIndices;
+    std::getline(file, valIndices);
+    std::stringstream ssValIndices(valIndices);
+
+    std::vector<std::string> valTokens;
+    std::string valToken;
+
+    while (std::getline(ssValIndices, valToken, ',')) {
+        valTokens.push_back(valToken);
+    }
+
+    for (int i = 0; i < nnz; i++) {
+        values[i] = std::stod(valTokens[i]);
+    }
+
+    file.close();
+}
+
 void parseCsvToCsr(int &m, int &n, int &nnz, int *&rows, int *&cols, dtype *&values, std::string filename) {
     std::string filePath = "./test_matrices/csr/" + std::string(filename) + ".csv";
     std::ifstream file(filePath);
@@ -169,6 +247,20 @@ void parseCsvToCsr(int &m, int &n, int &nnz, int *&rows, int *&cols, dtype *&val
 
 dtype* generateCOOGroundTruth(int m, int n, int nnz, int *rows, int *cols, dtype *values) {
     dtype *groundTruth = new dtype[m * n];
+    for (int i = 0; i < m * n; i++) {
+        groundTruth[i] = 0.0;
+    }
+
+    for (int i = 0; i < nnz; i++) {
+        // printf();
+        groundTruth[cols[i] * m + rows[i]] = values[i];
+    }
+
+    return groundTruth;
+}
+
+cutype* generateCOOGroundTruth(int m, int n, int nnz, int *rows, int *cols, cutype *values) {
+    cutype *groundTruth = new cutype[m * n];
     for (int i = 0; i < m * n; i++) {
         groundTruth[i] = 0.0;
     }

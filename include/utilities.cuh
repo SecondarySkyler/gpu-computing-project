@@ -10,6 +10,7 @@
 
 #define NUM_REPS 101
 #define dtype double
+#define cutype float
 #define BLOCK_SIZE 256
 #define CHECK(call)                                                            \
 {                                                                              \
@@ -50,6 +51,7 @@ void warm_up_gpu();
  * @param filename name of the CSV file
  */
 void parseCsvToCoo(int &m, int &n, int &nnz, int *&rows, int *&cols, dtype *&values, std::string filename);
+void parseCsvToCoo(int &m, int &n, int &nnz, int *&rows, int *&cols, cutype *&values, std::string filename);
 
 /**
  * @brief Parse a CSV file to CSR format
@@ -76,6 +78,7 @@ void parseCsvToCsr(int &m, int &n, int &nnz, int *&rows, int *&cols, dtype *&val
  * @note The generated ground truth is already transposed to ease comparison with the output of the algorithm
  */
 dtype* generateCOOGroundTruth(int m, int n, int nnz, int *rows, int *cols, dtype *values);
+cutype* generateCOOGroundTruth(int m, int n, int nnz, int *rows, int *cols, cutype *values);
 
 dtype* generateGroundTruthFromMTX(std::string filename);
 

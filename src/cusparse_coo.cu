@@ -4,15 +4,15 @@
 void cusparse_COO(std::string fileName) {
     int rows, cols, nnz;
     int* row, *col;
-    dtype* val;
+    cutype* val;
 
     parseCsvToCoo(rows, cols, nnz, row, col, val, fileName);
-    dtype* groundTruth = generateCOOGroundTruth(rows, cols, nnz, row, col, val);
+    cutype* groundTruth = generateCOOGroundTruth(rows, cols, nnz, row, col, val);
 
     int size = rows * cols;
 
-    dtype* h_identityMatrix = (dtype*)malloc(size * sizeof(dtype));
-    dtype* h_result = (dtype*)malloc(size * sizeof(dtype));
+    cutype* h_identityMatrix = (cutype*)malloc(size * sizeof(cutype));
+    cutype* h_result = (cutype*)malloc(size * sizeof(cutype));
 
     for (int i = 0; i < size; i++) {
         h_result[i] = 0.0;
@@ -34,19 +34,19 @@ void cusparse_COO(std::string fileName) {
 
     // Device memory management
     int *d_row, *d_col;
-    dtype *d_val, *d_identityMatrix, *d_result;
+    cutype *d_val, *d_identityMatrix, *d_result;
 
     CHECK(cudaMalloc(&d_row, nnz * sizeof(int)));
     CHECK(cudaMalloc(&d_col, nnz * sizeof(int)));
-    CHECK(cudaMalloc(&d_val, nnz * sizeof(dtype)));
-    CHECK(cudaMalloc(&d_identityMatrix, size * sizeof(dtype)));
-    CHECK(cudaMalloc(&d_result, size * sizeof(dtype)));
+    CHECK(cudaMalloc(&d_val, nnz * sizeof(cutype)));
+    CHECK(cudaMalloc(&d_identityMatrix, size * sizeof(cutype)));
+    CHECK(cudaMalloc(&d_result, size * sizeof(cutype)));
 
     CHECK(cudaMemcpy(d_row, row, nnz * sizeof(int), cudaMemcpyHostToDevice));
     CHECK(cudaMemcpy(d_col, col, nnz * sizeof(int), cudaMemcpyHostToDevice));
-    CHECK(cudaMemcpy(d_val, val, nnz * sizeof(dtype), cudaMemcpyHostToDevice));
-    CHECK(cudaMemcpy(d_identityMatrix, h_identityMatrix, size * sizeof(dtype), cudaMemcpyHostToDevice));
-    CHECK(cudaMemcpy(d_result, h_result, size * sizeof(dtype), cudaMemcpyHostToDevice));
+    CHECK(cudaMemcpy(d_val, val, nnz * sizeof(cutype), cudaMemcpyHostToDevice));
+    CHECK(cudaMemcpy(d_identityMatrix, h_identityMatrix, size * sizeof(cutype), cudaMemcpyHostToDevice));
+    CHECK(cudaMemcpy(d_result, h_result, size * sizeof(cutype), cudaMemcpyHostToDevice));
 
     cudaEvent_t start, stop;
     CHECK(cudaEventCreate(&start));
@@ -128,7 +128,7 @@ void cusparse_COO(std::string fileName) {
     CHECK_CUSPARSE(cusparseDestroy(handle));
 
     // Copy the result back to host
-    CHECK(cudaMemcpy(h_result, d_result, size * sizeof(dtype), cudaMemcpyDeviceToHost));
+    CHECK(cudaMemcpy(h_result, d_result, size * sizeof(cutype), cudaMemcpyDeviceToHost));
 
     // Compare the results
     bool isCorrect = true;
@@ -157,7 +157,7 @@ void cusparse_COO(std::string fileName) {
     //     }
     //     printf("\n");
     // }
-    dtype totalData = (rows * cols) * sizeof(dtype);
+    cutype totalData = (rows * cols) * sizeof(cutype);
     totalData *= 3;
 
     printf("Performed cuSparse transposition on matrix %s\n", fileName.c_str());
