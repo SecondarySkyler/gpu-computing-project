@@ -28,9 +28,14 @@ make
 ```
 At this point you are ready to run the project using:
 ```
-./transpose <0 - 9 | all>
+./transpose <coo | csr> <0 - 9>
 ```
-Where you can use a number between 0 and 9 to perform the transposition on a specific matrix, or by using *all* to transpose all the matrices listed below
+Where you can specify which algorithm to use and a number between 0 and 9 to perform the transposition on a specific matrix.
+<u>__Example usage:__</u>
+```
+./transpose coo 2
+```
+This will execute the COO transposition on matrix *bips07_1998*.
 
 ## Matrices used for testing
 The matrices used for benchmarking the project has been collected from the [SuiteSparse Matrix Collection](https://sparse.tamu.edu/).
@@ -56,7 +61,7 @@ chmod 755 tarball_name.tar.gz
 tar -xvzf tarball_name.tar.gz
 ```
 At this point you will find the directory containing the *.mtx* file. <br />
-Move it inside the `test_matrices/`. 
+Move the *.mtx* file inside the `test_matrices/`. 
 ```
 mv matrix_name/matrix_name.mtx ./test_matrices/
 ```
@@ -65,4 +70,6 @@ Now we need to generate the corresponding COO and CSR csv files. To do so I wrot
 python3 parser.py matrix_name
 ```
 This command will generate the corresponding files under the `./test_matrices/coo/` and `./test_matrices/csr/` directories. <br />
-At this point you should be able to run the project specifying the name (without .mtx) of the matrix.
+As last step modify the *matrixNames* array in `main.cpp` adding the name of the downloaded matrix. (Remember also to change the size of the std::array)  
+Now you can run `make clean` if you have previously built the project, then run `make` to compile.  
+At this point you should be able to run the project specifying the index of the matrix.
