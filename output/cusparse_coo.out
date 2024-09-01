@@ -1,0 +1,37 @@
+Performed cuSparse transposition on matrix arc130
+Bandwidth: 1.583622 GB/s
+Status: Correct
+--------------------------------
+Performed cuSparse transposition on matrix fd15
+Bandwidth: 352.479658 GB/s
+Status: Correct
+--------------------------------
+Performed cuSparse transposition on matrix bips07_1998
+Bandwidth: 281.826756 GB/s
+Status: Correct
+--------------------------------
+MISSING bayer10
+Performed cuSparse transposition on matrix piston
+Bandwidth: 28.529039 GB/s
+Status: Correct
+--------------------------------
+Performed cuSparse transposition on matrix cage10
+Bandwidth: 112.430807 GB/s
+Status: Correct
+--------------------------------
+Performed cuSparse transposition on matrix Ill_Stokes
+Bandwidth: 60.447603 GB/s
+Status: Correct
+--------------------------------
+Performed cuSparse transposition on matrix msc10848
+Bandwidth: 36.987141 GB/s
+Status: Correct
+--------------------------------
+Performed cuSparse transposition on matrix appu
+Bandwidth: 4.433432 GB/s
+Status: Correct
+--------------------------------
+Performed cuSparse transposition on matrix TSOPF_RS_b300_c2
+Bandwidth: 19.815126 GB/s
+Status: Correct
+--------------------------------

@@ -1,0 +1,40 @@
+Performed COO transposition on matrix arc130
+Bandwidth: 4.536225 GB/s
+Status: Correct
+--------------------------------
+Performed COO transposition on matrix fd15
+Bandwidth: 143.544430 GB/s
+Status: Correct
+--------------------------------
+Performed COO transposition on matrix bips07_1998
+Bandwidth: 188.399649 GB/s
+Status: Correct
+--------------------------------
+Performed COO transposition on matrix bayer10
+Bandwidth: 254.338019 GB/s
+Status: Correct
+--------------------------------
+Performed COO transposition on matrix piston
+Bandwidth: 268.428866 GB/s
+Status: Correct
+--------------------------------
+Performed COO transposition on matrix cage10
+Bandwidth: 348.077062 GB/s
+Status: Correct
+--------------------------------
+Performed COO transposition on matrix Ill_Stokes
+Bandwidth: 405.917496 GB/s
+Status: Correct
+--------------------------------
+Performed COO transposition on matrix msc10848
+Bandwidth: 686.969429 GB/s
+Status: Correct
+--------------------------------
+Performed COO transposition on matrix appu
+Bandwidth: 838.666402 GB/s
+Status: Correct
+--------------------------------
+Performed COO transposition on matrix TSOPF_RS_b300_c2
+Bandwidth: 725.796222 GB/s
+Status: Correct
+--------------------------------

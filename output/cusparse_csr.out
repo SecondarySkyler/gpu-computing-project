@@ -1,0 +1,40 @@
+Performed CSR to CSC conversion on matrix arc130
+Bandwidth: 0.263353 GB/s
+Status: Correct
+--------------------------------
+Performed CSR to CSC conversion on matrix fd15
+Bandwidth: 14.105009 GB/s
+Status: Correct
+--------------------------------
+Performed CSR to CSC conversion on matrix bips07_1998
+Bandwidth: 11.142446 GB/s
+Status: Correct
+--------------------------------
+Performed CSR to CSC conversion on matrix bayer10
+Bandwidth: 33.557303 GB/s
+Status: Correct
+--------------------------------
+Performed CSR to CSC conversion on matrix piston
+Bandwidth: 16.762735 GB/s
+Status: Correct
+--------------------------------
+Performed CSR to CSC conversion on matrix cage10
+Bandwidth: 25.065072 GB/s
+Status: Correct
+--------------------------------
+Performed CSR to CSC conversion on matrix Ill_Stokes
+Bandwidth: 60.412507 GB/s
+Status: Correct
+--------------------------------
+Performed CSR to CSC conversion on matrix msc10848
+Bandwidth: 84.701968 GB/s
+Status: Correct
+--------------------------------
+Performed CSR to CSC conversion on matrix appu
+Bandwidth: 146.834916 GB/s
+Status: Correct
+--------------------------------
+Performed CSR to CSC conversion on matrix TSOPF_RS_b300_c2
+Bandwidth: 199.166832 GB/s
+Status: Correct
+--------------------------------

@@ -1,0 +1,40 @@
+Performed CSR transposition on matrix arc130
+Bandwidth: 0.977524 GB/s
+Status: Correct
+--------------------------------
+Performed CSR transposition on matrix fd15
+Bandwidth: 8.256530 GB/s
+Status: Correct
+--------------------------------
+Performed CSR transposition on matrix bips07_1998
+Bandwidth: 8.600048 GB/s
+Status: Correct
+--------------------------------
+Performed CSR transposition on matrix bayer10
+Bandwidth: 13.649429 GB/s
+Status: Correct
+--------------------------------
+Performed CSR transposition on matrix piston
+Bandwidth: 42.154990 GB/s
+Status: Correct
+--------------------------------
+Performed CSR transposition on matrix cage10
+Bandwidth: 23.236858 GB/s
+Status: Correct
+--------------------------------
+Performed CSR transposition on matrix Ill_Stokes
+Bandwidth: 16.950749 GB/s
+Status: Correct
+--------------------------------
+Performed CSR transposition on matrix msc10848
+Bandwidth: 55.444199 GB/s
+Status: Correct
+--------------------------------
+Performed CSR transposition on matrix appu
+Bandwidth: 80.758316 GB/s
+Status: Correct
+--------------------------------
+Performed CSR transposition on matrix TSOPF_RS_b300_c2
+Bandwidth: 75.394124 GB/s
+Status: Correct
+--------------------------------
